@@ -1,6 +1,7 @@
 import json
 import csv
 from datetime import datetime
+import texts
 
 class Note:
     def __init__(self, title, content=''):
@@ -97,3 +98,29 @@ class NotesManager:
                 self.notes.append(note)
             self.save_notes()
 
+def manage_notes(notes_manager: NotesManager) -> None:
+    print(texts.NOTES)
+    action = input("Выберите действие: ")
+    if action == "1":
+        title = input("Введите название: ")
+        content = input("Введите содержимое заметки: ")
+        notes_manager.create_note(title, content)
+    elif action == "2":
+        print(notes_manager.view_notes())
+    elif action == "3":
+        note_id = int(input("Введите id заметки: "))
+        print(notes_manager.view_note_details(note_id))
+    elif action == "4":
+        note_id = int(input("Введите id заметки: "))
+        title = input("Введите название: ")
+        content = input("Введите содержимое заметки: ")
+        notes_manager.edit_note(note_id, title, content)
+    elif action == "5":
+        note_id = int(input("Введите id заметки: "))
+        notes_manager.delete_note(note_id)
+    elif action == "6":
+        filename = input("Введите имя файла: ")
+        notes_manager.export_to_csv(filename)
+    elif action == "7":
+        filename = input("Введите имя файла: ")
+        notes_manager.import_from_csv(filename)

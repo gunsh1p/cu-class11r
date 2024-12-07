@@ -2,6 +2,7 @@ import json
 import csv
 from datetime import datetime
 from collections import defaultdict
+import texts
 
 class FinanceRecord:
     def __init__(self, amount, category, date, description=''):
@@ -117,3 +118,33 @@ class FinanceManager:
         for record in self.records:
             grouped[record.category] += record.amount
         return dict(grouped)
+
+def manage_finances(finance_manager: FinanceManager) -> None:
+    print(texts.FINANCES)
+    action = input("Выберите действие: ")
+    if action == '1':
+        amount = float(input("Введите сумму: "))
+        category = input("Введите категорию: ")
+        date = input("Введите дату (DD-MM-YYYY): ")
+        description = input("Введите описание (необязательно): ")
+        finance_manager.add_record(amount, category, date, description)
+    elif action == '2':
+        filtered = input("Добавить фильтры [Y/n]: ")
+        if filtered.lower() == "y":
+            category = input("Введите категорию: ")
+            start_date = input("Введите начальную дату (DD-MM-YYYY): ")
+            end_date = input("Введите конечную дату (DD-MM-YYYY): ")
+            records = finance_manager.filter_records(category, start_date, end_date)
+        else:
+            records = finance_manager.view_records()
+        print(records)
+    elif action == '3':
+        start_date = input("Введите начальную дату (DD-MM-YYYY): ")
+        end_date = input("Введите конечную дату (DD-MM-YYYY): ")
+        finance_manager.generate_report(start_date, end_date)
+    elif action == '4':
+        filename = input("Введите имя файла: ")
+        finance_manager.export_to_csv(filename)
+    elif action == '5':
+        filename = input("Введите имя файла: ")
+        finance_manager.import_from_csv(filename)

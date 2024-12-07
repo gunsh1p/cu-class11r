@@ -38,3 +38,9 @@ class Calculator:
             return str(e)
         except Exception as e:
             return "Ошибка: " + str(e)
+
+def calculate(calculator: Calculator) -> None:
+    expression = input("Введите выражение (например, \"2 + 2\"): ")
+    result = calculator.calculate(expression)
+    if result is not None:
+        print(result)
