@@ -1,8 +1,8 @@
-from notes import NotesManager, manage_notes
-from tasks import TaskManager, manage_tasks
-from contacts import ContactsManager, manage_contacts
-from finances import FinanceManager, manage_finances
-from calc import Calculator, calculate
+from managers.notes import NotesManager, manage_notes
+from managers.tasks import TaskManager, manage_tasks
+from managers.contacts import ContactsManager, manage_contacts
+from managers.finances import FinanceManager, manage_finances
+from managers.calc import Calculator, calculate
 import texts
 
 def main():
