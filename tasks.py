@@ -1,6 +1,7 @@
 import json
 import csv
 from datetime import datetime
+import texts
 
 class Task:
     def __init__(self, title, description='', priority='Низкий', due_date=None):
@@ -109,3 +110,48 @@ class TaskManager:
         if due_date is not None:
             filtered_tasks = [task for task in filtered_tasks if task.due_date == due_date]
         return filtered_tasks
+
+def manage_tasks(task_manager: TaskManager) -> None:
+    print(texts.TASKS)
+    action = input("Выберите действие: ")
+    if action == "1":
+        title = input("Введите название задачи: ")
+        description = input("Введите описание задачи: ")
+        priority = input("Введите приоритет (Высокий, Средний, Низкий): ")
+        due_date = input("Введите срок выполнения (ДД-ММ-ГГГГ): ")
+        task_manager.add_task(title, description, priority, due_date)
+    elif action == "2":
+        filtered = input("Добавить фильтры [Y/n]: ")
+        if filtered.lower() == "y":
+            status_input = input("Фильтровать по статусу (выполнена/не выполнена, оставьте пустым для пропуска): ")
+            priority_input = input("Фильтровать по приоритету (Высокий, Средний, Низкий, оставьте пустым для пропуска): ")
+            due_date_input = input("Фильтровать по сроку выполнения (ДД-ММ-ГГГГ, оставьте пустым для пропуска): ")
+            status = None
+            if status_input.lower() == 'выполнена':
+                status = True
+            elif status_input.lower() == 'не выполнена':
+                status = False
+            tasks = task_manager.filter_tasks(status, priority_input or None, due_date_input or None)
+        else:
+            tasks = task_manager.view_tasks()
+        for task in tasks:
+            print(f"{task.id}: {task.title} - {'Выполнена' if task.done else 'Не выполнена'}, Приоритет: {task.priority}, Срок: {task.due_date}")
+    elif action == "3":
+        task_id = int(input("Введите id задачи: "))
+        task_manager.mark_task_done(task_id)
+    elif action == "4":
+        task_id = int(input("Введите id задачи: "))
+        title = input("Введите новое название задачи (оставьте пустым для пропуска): ")
+        description = input("Введите новое описание задачи (оставьте пустым для пропуска): ")
+        priority = input("Введите новый приоритет (оставьте пустым для пропуска): ")
+        due_date = input("Введите новый срок выполнения (оставьте пустым для пропуска): ")
+        task_manager.edit_task(task_id, title or None, description or None, priority or None, due_date or None)
+    elif action == "5":
+        task_id = int(input("Введите id задачи: "))
+        task_manager.delete_task(task_id)
+    elif action == "6":
+        filename = input("Введите имя файла: ")
+        task_manager.export_to_csv(filename)
+    elif action == "7":
+        filename = input("Введите имя файла: ")
+        task_manager.import_from_csv(filename)

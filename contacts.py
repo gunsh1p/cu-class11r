@@ -1,5 +1,6 @@
 import json
 import csv
+import texts
 
 class Contact:
     def __init__(self, name, phone=None, email=None):
@@ -91,3 +92,35 @@ class ContactsManager:
                 self.contacts.append(contact)
             self.save_contacts()
 
+def manage_contacts(contacts_manager: ContactsManager) -> None:
+    print(texts.CONTACTS)
+    action = input("Выберите действие: ")
+    if action == '1':
+        name = input("Введите имя контакта: ")
+        phone = input("Введите номер телефона: ")
+        email = input("Введите email: ")
+        contacts_manager.add_contact(name, phone, email)
+    elif action == '2':
+        search_term = input("Введите имя или номер для поиска: ")
+        results = contacts_manager.search_contact(search_term)
+        if results:
+            print("Найденные контакты:")
+            for contact in results:
+                print(f"Имя: {contact.name}, Телефон: {contact.phone}")
+        else:
+            print("Контакты не найдены.")
+    elif action == '3':
+        contact_id = int(input("Введите id контакта: "))
+        name = input("Введите имя контакта: ")
+        phone = input("Введите номер телефона: ")
+        email = input("Введите email: ")
+        contacts_manager.edit_contact(contact_id, name, phone, email)
+    elif action == '4':
+        contact_id = int(input("Введите id контакта: "))
+        contacts_manager.delete_contact(contact_id)
+    elif action == '5':
+        filename = input("Введите имя файла: ")
+        contacts_manager.export_to_csv(filename)
+    elif action == '6':
+        filename = input("Введите имя файла: ")
+        contacts_manager.import_from_csv(filename)
